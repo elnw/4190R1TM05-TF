@@ -1,6 +1,8 @@
+#ifndef danceofdeath
+#define danceofdeath
 #include "Enemigo.h"
-#include <iostream>
 #include "Mapa.h"
+#include "Personaje.h"
 CEnemigo::CEnemigo()
 {
 	
@@ -12,7 +14,7 @@ CEnemigo::CEnemigo()
 
 CEnemigo::~CEnemigo(){
 }
-void CEnemigo::ColisionRango(int JposX, int JposY) {
+bool CEnemigo::ColisionRango(int JposX, int JposY) {
 	if (pos == 1) {
 		if (JposX < 270+325&&JposY<515) {
 			rango = true;
@@ -33,21 +35,25 @@ void CEnemigo::ColisionRango(int JposX, int JposY) {
 			rango = true;
 		}
 	}
+	return rango;
 }
-void CEnemigo::Es_Atacado(int daño) {
+
+long long CEnemigo::experiencia( ){
+	return exp;
+}
+void CEnemigo::Es_Atacado(long long daño) {
 	if (rand() % 100 > evasion) {
 		vida = vida - daño;
 	}
 	if (vida <= 0) {
 		muerto = true;
 		ataque = 0;
+
 	}
 }
-void CEnemigo::generar_enemigo(int x, int y,int lugar,CMapa *obj, int semilla) {
+void CEnemigo::generar_enemigo(int x, int y,int lugar,int minimo, int maximo, int semilla) {
 	srand(semilla);
-	int min = obj->getminimo();
-	int max = obj->getmaximo();
-	tipo = (rand() % (max - min)) + min;
+	tipo = (rand() % (maximo - minimo)) + minimo;
 	item = rand() % 2;
 	pos = lugar;
 	evasion = 2 * (tipo + 1);
@@ -57,8 +63,8 @@ void CEnemigo::generar_enemigo(int x, int y,int lugar,CMapa *obj, int semilla) {
 	vida = vida*(x+1)*(y+1);
 	ataque = ataque*(x + 1)*(y + 1);
 }
-long long CEnemigo::atacar(int JposX, int JposY){
-ColisionRango(JposX, JposY);
+long long CEnemigo::atacar(){
+//ColisionRango(JposX, JposY);
 	if (rango == true) {
 		return ataque;
 	}
@@ -72,6 +78,9 @@ int CEnemigo::gettipo() {
 bool CEnemigo::getmuerto() {
 	return muerto;
 }
+int CEnemigo::getpos(){
+	return pos;
+}
 bool CEnemigo::getitem() {
 	if (item == 1) {
 		return true;
@@ -80,3 +89,4 @@ bool CEnemigo::getitem() {
 		return false;
 	}
 }
+#endif

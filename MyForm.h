@@ -90,9 +90,12 @@ namespace juego_final {
 		CJefe *objChief;
 		ArrEnemigos *objArrEne;
 		CMapa *objmapa;
-		
+		CPersonaje *jugador;
+		Bitmap^ imgEnemigos;
+
 	private: System::Windows::Forms::Timer^  timer3;
-			 CMision *prueba;
+	private: System::Windows::Forms::PictureBox^  pictureBox7;
+			 //CMision *prueba;
 #pragma region Windows Form Designer generated code
 		/// <summary>
 		/// Required method for Designer support - do not modify
@@ -132,18 +135,20 @@ namespace juego_final {
 			this->listBox6 = (gcnew System::Windows::Forms::ListBox());
 			this->listBox7 = (gcnew System::Windows::Forms::ListBox());
 			this->timer3 = (gcnew System::Windows::Forms::Timer(this->components));
+			this->pictureBox7 = (gcnew System::Windows::Forms::PictureBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox3))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox4))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox5))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox6))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox7))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// pictureBox1
 			// 
 			this->pictureBox1->BackColor = System::Drawing::SystemColors::ButtonFace;
-			this->pictureBox1->Location = System::Drawing::Point(13, 13);
+			this->pictureBox1->Location = System::Drawing::Point(59, 12);
 			this->pictureBox1->Name = L"pictureBox1";
 			this->pictureBox1->Size = System::Drawing::Size(1238, 378);
 			this->pictureBox1->TabIndex = 0;
@@ -393,12 +398,22 @@ namespace juego_final {
 			// 
 			this->timer3->Tick += gcnew System::EventHandler(this, &MyForm::timer3_Tick);
 			// 
+			// pictureBox7
+			// 
+			this->pictureBox7->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox7.Image")));
+			this->pictureBox7->Location = System::Drawing::Point(118, 242);
+			this->pictureBox7->Name = L"pictureBox7";
+			this->pictureBox7->Size = System::Drawing::Size(343, 73);
+			this->pictureBox7->TabIndex = 27;
+			this->pictureBox7->TabStop = false;
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(1300, 740);
+			this->Controls->Add(this->pictureBox7);
 			this->Controls->Add(this->listBox7);
 			this->Controls->Add(this->listBox6);
 			this->Controls->Add(this->pictureBox6);
@@ -440,6 +455,7 @@ namespace juego_final {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox4))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox5))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox6))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox7))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -456,7 +472,7 @@ namespace juego_final {
 		int contdecont = 0;
 		Rectangle esprait;
 		Rectangle zona2;
-		
+		int semilla_maestra;
 
 	private: System::Void MyForm_Load(System::Object^  sender, System::EventArgs^  e) {
 		//CPersonaje objpersonaje;
@@ -465,6 +481,7 @@ namespace juego_final {
 		objEnemigo = new CEnemigo();
 		objper = new CPersonaje();
 		objArrEne = new ArrEnemigos();
+		
 		listBox1->Items->Add(objper->getnivel());
 		listBox2->Items->Add(objper->getvida());
 		listBox3->Items->Add(objper->getataque());
@@ -477,13 +494,15 @@ namespace juego_final {
 		//delete imgTransparente;
 		zona2 = Rectangle(356,397 , 620, 445);
 		esprait = Rectangle(0, 0, 50, 50);
-
 		srand(time_t(NULL));
-		int semilla_maestra = rand() % 20000;
+		semilla_maestra = rand() % 20000;
+		imgEnemigos = gcnew Bitmap(pictureBox7->Image);
+		imgEnemigos->MakeTransparent(imgEnemigos->GetPixel(1, 1));
 		for (int i = 0; i < 14; i++){
-			objEnemigo->generar_enemigo(objmapa->getx(), objmapa->gety(), i, objmapa, semilla_maestra);
+			objEnemigo->generar_enemigo(objmapa->getx(), objmapa->gety(), i, objmapa->getminimo(), objmapa->getmaximo(), semilla_maestra);
 			objArrEne->AgregarEnemigo(objEnemigo);
 		}
+		jugador = new CPersonaje();
 		
 	}
 	private: System::Void timer1_Tick(System::Object^  sender, System::EventArgs^  e) {
@@ -525,7 +544,7 @@ namespace juego_final {
 
 
 	private: System::Void movimiento(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-		
+
 		switch (e->KeyCode){
 		case Keys::A:
 			if (posx > 400){
@@ -534,17 +553,29 @@ namespace juego_final {
 				dx = -10;
 				dy = 0;
 			}
+			else{
+				if (objmapa->getx()>0 && posy<600 && posy>500){
+					posx = 750;
+					objmapa->cruzandopuerta(-1, 0, objArrEne, objEnemigo, objmapa, semilla_maestra);
+				}
+			}
 			break;
 
 		case Keys::W:
-				if (posy > 500){
-					timer1->Enabled = true;
-					botn = 0;
-					dy = -10;
-					dx = 0;
+			if (posy > 500){
+				timer1->Enabled = true;
+				botn = 0;
+				dy = -10;
+				dx = 0;
 
+			}
+			else{
+				if (objmapa->gety()>0 && posx<600 && posx>500){
+					posy = 650;
+					objmapa->cruzandopuerta(0, -1, objArrEne, objEnemigo, objmapa, semilla_maestra);
 				}
-		
+			}
+
 			break;
 		case Keys::D:
 			if (posx < 750){
@@ -552,6 +583,12 @@ namespace juego_final {
 				botn = 1;
 				dx = 10;
 				dy = 0;
+			}
+			else{
+				if (objmapa->getx()<40 && posy<600 && posy>500){
+					posx = 400;
+					objmapa->cruzandopuerta(1, 0, objArrEne, objEnemigo, objmapa, semilla_maestra);
+				}
 			}
 			break;
 		case Keys::S:
@@ -561,11 +598,19 @@ namespace juego_final {
 				dy = 10;
 				dx = 0;
 			}
+			else{
+				if (objmapa->gety()<40 && posx<600 && posx>500){
+					posy = 500;
+					objmapa->cruzandopuerta(0, 1, objArrEne, objEnemigo, objmapa, semilla_maestra);
+				}
+			}
 			break;
 		default:
 			break;
 		}
+
 		
+
 	}
 	private: System::Void parar(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 		timer1->Enabled = false;
@@ -667,6 +712,28 @@ namespace juego_final {
 	}
 	
 private: System::Void timer3_Tick(System::Object^  sender, System::EventArgs^  e) {
+	Graphics^G = this->CreateGraphics();
+	BufferedGraphicsContext^Espacio = BufferedGraphicsManager::Current;////Comentar esta Linea Para Solo Garphics
+	BufferedGraphics^Buffer = Espacio->Allocate(G, zona2);////Comentar esta Linea Para Solo Garphics
+	
+
+	for (int i = 0; i <= 13; i++){
+		if (objArrEne->getEnemigo(i)->getmuerto() == false){
+			if (objArrEne->getEnemigo(i)->ColisionRango(posx,posy)==true){
+				jugador->atacado(objArrEne->getEnemigo(i)->atacar());
+			}
+
+			objdibu->pintarenemigos(imgEnemigos, Buffer->Graphics, objArrEne->getEnemigo(i));
+		}
+	
+	}
+
+
+
+
+
+
+
 
 }
 };
