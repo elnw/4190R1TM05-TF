@@ -1,8 +1,9 @@
 #pragma once
+#include <string>
 class CItem
 {
 protected:
-	char *nombre;
+	std::string nombre;
 	int aumDefensa;
 	int aumAtaque;
 	int vida;
@@ -12,7 +13,7 @@ protected:
 public:
 	CItem();
 	~CItem();
-	void setEstadistica(bool recibir);
+	void setEstadistica(std::string nombre, int aumDefensa, int aumAtaque);
 	int getAumDefensa();
 	int getAumAtaque();
 	CItem *getPremio(int cantidad, int tipo);
