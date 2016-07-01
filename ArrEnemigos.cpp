@@ -3,24 +3,25 @@
 
 ArrEnemigos::ArrEnemigos()
 {
+	objEnemigos = new std::vector<CEnemigo>();
 }
 
 
 ArrEnemigos::~ArrEnemigos()
 {
-	objEnemigos.clear();
+	objEnemigos->clear();
 }
 
 
 
-std::vector<CEnemigo*> ArrEnemigos::getEnemigos(){
+/*std::vector<CEnemigo>* ArrEnemigos::getEnemigos(){
 	return objEnemigos;
+}*/
+
+CEnemigo ArrEnemigos::getEnemigo(int pos){
+	return objEnemigos->at(pos);
 }
 
-CEnemigo *ArrEnemigos::getEnemigo(int pos){
-	return objEnemigos.at(pos);
-}
-
-void ArrEnemigos::AgregarEnemigo(CEnemigo *malevolo){
-	objEnemigos.push_back(malevolo);
+void ArrEnemigos::AgregarEnemigo(CEnemigo malevolo){
+	objEnemigos->push_back(malevolo);
 }

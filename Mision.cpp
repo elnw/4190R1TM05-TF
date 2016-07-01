@@ -9,10 +9,10 @@ CMision::CMision()
 
 CMision::~CMision()
 {
-	delete enunciado;
+	
 }
 
-recompensa recompensa::setRecompensa(){
+/*recompensa recompensa::setRecompensa(){
 	recompensa registro;
 	std::ifstream enun("enunciado.txt");
 	std::ifstream motivo("motivo.txt");
@@ -68,12 +68,24 @@ recompensa recompensa::setRecompensa(){
 
 	return registro;
 
-}
+}*/
 
-char *CMision::getMision(){
+std::string CMision::getMision(){
 	return enunciado;
 }
 
 void CMision::setCantidad(int cant){
 	this->cantidad = cant;
+}
+
+void CMision::setEnunciado(std::string enunciado){
+	this->enunciado = enunciado;
+}
+
+void CMision::setDificultad(int indicador){
+	this->dificultad = indicador;
+}
+
+int CMision::getDificultad(){
+	return dificultad;
 }

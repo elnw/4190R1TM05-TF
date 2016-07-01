@@ -1,4 +1,5 @@
 #pragma once
+#include "ArrEnemigos.h"
 class CPersonaje
 {
 protected:
@@ -41,7 +42,9 @@ public:
 	void iniciosupermodo();
 	void finsupermodo();
 	void calculardefensareal();
-	void atacado(int daño);
+	void atacado(long long daño);
 	bool getmuerto();
+	void Atacar(ArrEnemigos *vector, int valor, int posx, int posy,bool &validar);
+	
 };
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "Item.h"
+#include <string>
 
 
 struct recompensa
@@ -13,14 +14,19 @@ struct recompensa
 class CMision
 {
 private:
-	char *enunciado;
+	std::string enunciado;
 	int cantidad;
+	int dificultad;
 public:
 	
 	CMision();
 	~CMision();
 	friend recompensa recompensa::setRecompensa();
-	char *getMision();
+	std::string getMision();
 	void setCantidad(int cant);
+	void setEnunciado(std::string enunciado);
+	void setDificultad(int indicador);
+
+	int getDificultad();
 };
 

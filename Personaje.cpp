@@ -40,35 +40,35 @@ void CPersonaje::calculardefensareal(){
 	defensareal =(double)defensa / 100 + (double)defensa;
 }
 long long CPersonaje::getvida(){
-	return vida;
+	return this->vida;
 }
 int CPersonaje::getnivel(){
-	return nivel;
+	return this->nivel;
 }
 long long CPersonaje::getataque(){
-	return ataque;
+	return this->ataque;
 }
 long long CPersonaje::getdefensa(){
-	return defensa;
+	return this->defensa;
 }
 int CPersonaje::getenergia(){
-	return energia;
+	return this->energia;
 }
 int CPersonaje::getpocionvida(){
-	return pocionvida;
+	return this->pocionvida;
 }
 int CPersonaje::getpocionenergia(){
-	return pocionenergia;
+	return this->pocionenergia;
 }
 void CPersonaje::aumentar_nivel(){
 	if (exp >= expmax) {
-		nivel++;
-		vida = vida + 20;
-		energia = energia + 20;
-		vidamax = vidamax + 20;
-		energiamax = energiamax + 20;
-		exp = 0;
-		expmax = expmax * 10;
+		this->nivel++;
+		this->vida = vida + 20;
+		this->energia = energia + 20;
+		this->vidamax = vidamax + 20;
+		this->energiamax = energiamax + 20;
+		this->exp = 0;
+		this->expmax = expmax * 10;
 	}
 }
 void CPersonaje::aumentar_atributo(int aumentoatk, int aumentodef,int aumentopocvida, int aumentopocene){
@@ -95,12 +95,31 @@ void CPersonaje::finsupermodo(){
 		contcondicionado++;
 	}
 }
-void CPersonaje::atacado(int daño){
-	vida = vida - long long(double(daño)*defensareal);
+void CPersonaje::atacado(long long daño){
+	this->vida = this->vida - long long(daño*double(1-defensareal));
 	if (vida <= 0){
 		muerto = true;
 	}
+	
 }
 bool CPersonaje::getmuerto(){
 	return muerto;
+}
+
+void CPersonaje::Atacar(ArrEnemigos *vector, int valor, int posx, int posy, bool &validar){
+	if (vector->getEnemigo(valor).ColisionRango(posx, posy)==true){
+		validar = true;
+		if (vector->getEnemigo(valor).getmuerto() == false){
+			vector->getEnemigo(valor).Es_Atacado(ataque);
+			if (vector->getEnemigo(valor).getmuerto() == true){
+				exp+=vector->getEnemigo(valor).experiencia();
+				if (exp > expmax){
+					aumentar_nivel();
+
+				}
+			}
+		}
+		
+	}
+	this->energia -= 20;
 }

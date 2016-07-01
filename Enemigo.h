@@ -1,6 +1,5 @@
-
 #pragma once
-#include "Mapa.h"
+
 
 class CEnemigo {
 protected:
@@ -10,19 +9,21 @@ protected:
 	int evasion;
 	bool rango;
 	int tipo;
-	int exp;
+	long long exp;
 	int pos;
 	int item;
 	
 public:
 	CEnemigo();
 	~CEnemigo();
-	void ColisionRango(int JposX, int JposY);
-	void Es_Atacado(int daño);
-	void generar_enemigo(int x, int y,int lugar,CMapa *obj, int semilla);
-	long long atacar(int JposX, int JposY);
+	int getpos();
+	bool ColisionRango(int JposX, int JposY);
+	void Es_Atacado(long long daño);
+	void generar_enemigo(int x, int y,int lugar,int minimo,int maximo, int semilla);
+	long long atacar();
 	int gettipo();
 	bool getmuerto();
 	bool getitem();
+	long long experiencia();
 };
 
