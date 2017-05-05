@@ -1,0 +1,149 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Evaluacion360.BL.BC;
+using Evaluacion360.DL.DataModel;
+namespace encuenta360.UI
+{
+    public partial class Reporte : Form
+    {
+        public int modo;
+        public Reporte(int indice)
+        {
+            modo = indice;
+            InitializeComponent();
+        }
+        public void preparacion() {
+            switch (modo)
+            {
+                case 1:
+                    lbltitulo.Text = "Administrador";
+                    CmbReporte.Items.Add("Empleado");
+                    CmbReporte.Items.Add("Supervisor");
+                    CmbReporte.Items.Add("Proveedor");
+                    break;
+                case 2:
+                    lbltitulo.Text = "Supervisor";
+                    CmbReporte.Items.Add("Empleados");
+                    CmbReporte.Items.Add("Informes");
+                  
+                    break;
+                case 3:
+                    lbltitulo.Text = "Empleado";
+                    CmbReporte.Items.Add("Notificaciones");
+                    CmbReporte.Items.Add("Puntos");
+                    break;
+                case 4:
+                    lbltitulo.Text = "proveedor";
+                    CmbReporte.Items.Add("informes");
+
+                    break;
+            }
+
+        }
+
+        private void Reporte_Load(object sender, EventArgs e)
+        {
+            preparacion();
+        }
+
+        private void btnCerrar_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void btnAgregar_Click(object sender, EventArgs e)
+        {
+            actualizador frm = new actualizador(1);
+            frm.ShowDialog();
+            //cargardatos();
+        }
+
+        private void btnEditar_Click(object sender, EventArgs e)
+        {
+            actualizador frm = new actualizador(2);
+            frm.ShowDialog();
+            //cargardatos();
+        }
+
+        private void CmbReporte_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (modo)
+            {
+                case 1:
+                    switch (CmbReporte.SelectedIndex){
+                        case 0:
+                            CmbFiltro.Items.Clear();
+                            CmbFiltro.Items.Add("ID del Empleado");
+                            CmbFiltro.Items.Add("Nombre del Empleado");
+                            CmbFiltro.Items.Add("Puntos del Empleado");
+                            break;
+                        case 1:
+                            CmbFiltro.Items.Clear();
+                            CmbFiltro.Items.Add("ID del Supervisor");
+                            CmbFiltro.Items.Add("Nombre del Supervisor");
+                            CmbFiltro.Items.Add("informes");
+                            break;
+                        case 2:
+                            CmbFiltro.Items.Clear();
+                            CmbFiltro.Items.Add("ID del Proveedor");
+                            CmbFiltro.Items.Add("Nombre del Proveedor");
+                            CmbFiltro.Items.Add("Informes");
+                            break;
+                       
+                    }
+                    break;
+                case 2:
+                    switch (CmbReporte.SelectedIndex)
+                    {
+                        case 0:
+                            CmbFiltro.Items.Clear();
+                            CmbFiltro.Items.Add("ID del Empleado");
+                            CmbFiltro.Items.Add("Nombre del Empleado");
+                            break;
+                        case 1:
+                            CmbFiltro.Items.Clear();
+                            CmbFiltro.Items.Add("ID del Empleado");
+                            CmbFiltro.Items.Add("Nombre del Empleado");
+                            CmbFiltro.Items.Add("Cantidad de Puntos");
+                            CmbFiltro.Items.Add("Puntos en un Periodo");
+                            break;
+                       
+                    }
+                    break;
+                case 3:
+                    switch (CmbReporte.SelectedIndex)
+                    {
+                        case 0:
+                            break;
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                    }
+                    break;
+                case 4:
+                    switch (CmbReporte.SelectedIndex)
+                    {
+                        case 0:
+                            break;
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                    }
+                    break;
+            }
+        }
+    }
+}
